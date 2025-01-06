@@ -1,4 +1,3 @@
-from tkinter import Tk, BOTH, Canvas
 from geometric_primitives import *
 
 class Cell():
