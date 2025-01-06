@@ -10,10 +10,10 @@ class Window():
         self.__root.title("Maze Solver")
 
         #Create a Canvas widget and save it as a data member.
-        self.canvas = Canvas(self.__root, width=width, height=height)
+        self.__canvas = Canvas(self.__root, width=width, height=height)
 
         #Pack the canvas widget so that it's ready to be drawn
-        self.canvas.pack()
+        self.__canvas.pack()
 
         #Create a data member to represent that the window is "running", and set it to False
         self.is_running = False
@@ -29,3 +29,6 @@ class Window():
 
     def close(self):
         self.is_running = False
+
+    def draw_line(self, line, fill_color="black"):
+        line.draw(self.__canvas, fill_color)
