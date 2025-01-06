@@ -1,7 +1,7 @@
 from geometric_primitives import *
 
 class Cell():
-    def __init__(self, window):
+    def __init__(self, window=None):
         self.has_left_wall = True
         self.has_right_wall= True
         self.has_top_wall= True
@@ -45,11 +45,11 @@ class Cell():
         # It should draw a line from the center of one cell to another.
         # Use the x/y coordinates of the 2 cells in question to decide how to draw the line connecting the two cells.
         line = Line(self.get_center(), to_cell.get_center())
-        if not undo:
-            # red line
-            self._win.draw_line(line, "red")
-        else:
-            # grey line 
-            self._win.draw_line(line, "grey")
 
+        fill_color = "red"
+        if undo:
+            fill_color = "gray"
+
+        self._win.draw_line(line, fill_color)
+        
         
