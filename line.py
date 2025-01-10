@@ -1,10 +1,11 @@
 from tkinter import Tk, BOTH, Canvas
+from dataclasses import dataclass
 from point import Point
 
+@dataclass
 class Line():
-    def __init__(self, point_a: Point, point_b: Point) -> None:
-        self._point_a:Point = point_a
-        self._point_b:Point = point_b
+    _point_a: Point
+    _point_b: Point
     
     def draw(self, canvas: Canvas, fill_color: str = "black") -> None:
         x1: float = self._point_a._x

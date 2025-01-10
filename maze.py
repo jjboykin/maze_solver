@@ -1,33 +1,25 @@
 import time
 import random
+from dataclasses import dataclass
 from cell import Cell
 from window import Window
 
+@dataclass
 class Maze():
-    def __init__(
-        self,
-        x1: int,
-        y1: int,
-        num_rows: int,
-        num_cols: int,
-        cell_size_x: float,
-        cell_size_y: float,
-        win: Window = None,
-        seed: int = None
-    ):
-        self._x1 = x1
-        self._y1 = y1
-        self._num_rows = num_rows
-        self._num_cols = num_cols
-        self._cell_size_x = cell_size_x
-        self._cell_size_y = cell_size_y
-        self._window = win
+    _x1: int
+    _y1: int
+    _num_rows: int
+    _num_cols: int
+    _cell_size_x: float
+    _cell_size_y: float
+    _window: Window = None
+    seed: int = None
+    
+    def __post_init__(self) -> None:
+        if self.seed:
+            random.seed(self.seed)
 
-        self._cells = []
-
-        if seed:
-            random.seed(seed)
-
+        self._cells: list[Cell] = []
         self._create_cells()
         print("grid initialization complete...")
         self._break_entrance_and_exit()
@@ -46,7 +38,7 @@ class Maze():
             for j in range(self._num_rows):
                 self._draw_cell(i, j)   
 
-    def _draw_cell(self, i, j) -> None:
+    def _draw_cell(self, i: int, j: int) -> None:
         x1 = self._x1 + (self._cell_size_x * i)
         y1 = self._y1 + (self._cell_size_y * j)
         x2 = x1 + self._cell_size_x
@@ -70,7 +62,7 @@ class Maze():
         self._cells[exit_col][exit_row].has_bottom_wall = False
         self._draw_cell(exit_col,exit_row)
 
-    def _break_walls_r(self, i, j) -> None:
+    def _break_walls_r(self, i: int, j: int) -> None:
         # a depth-first traversal through the cells, breaking down walls as it goes
         #Mark the current cell as visited
         current_col = i

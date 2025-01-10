@@ -1,6 +1,7 @@
 from tkinter import Tk, BOTH, Canvas
+from dataclasses import dataclass
 
+@dataclass
 class Point():
-    def __init__(self, x: float, y: float) -> None:
-        self._x: float = x
-        self._y: float = y
+    _x: float
+    _y: float
