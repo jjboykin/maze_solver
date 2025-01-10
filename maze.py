@@ -1,18 +1,19 @@
 import time
 import random
 from cell import Cell
+from window import Window
 
 class Maze():
     def __init__(
         self,
-        x1,
-        y1,
-        num_rows,
-        num_cols,
-        cell_size_x,
-        cell_size_y,
-        win = None,
-        seed = None
+        x1: int,
+        y1: int,
+        num_rows: int,
+        num_cols: int,
+        cell_size_x: float,
+        cell_size_y: float,
+        win: Window = None,
+        seed: int = None
     ):
         self._x1 = x1
         self._y1 = y1
@@ -34,7 +35,7 @@ class Maze():
         print("maze construction complete...")
         self._reset_cells_visited()
 
-    def _create_cells(self):
+    def _create_cells(self) -> None:
         for i in range(self._num_cols):
             column = []
             for j in range(self._num_rows):
@@ -45,7 +46,7 @@ class Maze():
             for j in range(self._num_rows):
                 self._draw_cell(i, j)   
 
-    def _draw_cell(self, i, j):
+    def _draw_cell(self, i, j) -> None:
         x1 = self._x1 + (self._cell_size_x * i)
         y1 = self._y1 + (self._cell_size_y * j)
         x2 = x1 + self._cell_size_x
@@ -54,13 +55,13 @@ class Maze():
         
         self._animate()
 
-    def _animate(self):
+    def _animate(self) -> None:
         if self._window is None:
             return
         self._window.redraw()
         time.sleep(0.025)    
 
-    def _break_entrance_and_exit(self):
+    def _break_entrance_and_exit(self) -> None:
         entrance_col, entrance_row = 0, 0
         self._cells[entrance_col][entrance_row].has_top_wall = False
         self._draw_cell(entrance_col,entrance_row)
@@ -69,7 +70,7 @@ class Maze():
         self._cells[exit_col][exit_row].has_bottom_wall = False
         self._draw_cell(exit_col,exit_row)
 
-    def _break_walls_r(self, i, j):
+    def _break_walls_r(self, i, j) -> None:
         # a depth-first traversal through the cells, breaking down walls as it goes
         #Mark the current cell as visited
         current_col = i
@@ -128,28 +129,29 @@ class Maze():
             #Move to the chosen cell by recursively calling _break_walls_r
             self._break_walls_r(chosen_col, chosen_row)
 
-    def _reset_cells_visited(self):
+    def _reset_cells_visited(self) -> None:
         for i in range(self._num_cols):
             for j in range(self._num_rows):
                 self._cells[i][j].visited = False
 
-    def solve(self):
+    def solve(self) -> bool:
         return self._solve_r(0, 0)
 
-    def _solve_r(self, i, j):
+    def _solve_r(self, i, j) -> bool:
         self._animate()
 
-        current_col = i
-        current_row = j
+        current_col: int = i
+        current_row: int = j
         self._cells[current_col][current_row].visited = True
 
-        is_end = ((current_col == len(self._cells) - 1) and (current_row == len(self._cells[current_col]) - 1))
+        is_end: bool = ((current_col == len(self._cells) - 1) and (current_row == len(self._cells[current_col]) - 1))
         if is_end:
             return True
         
+        is_solved: bool
         # North
         if current_row - 1 >= 0:
-            north_cell = self._cells[current_col][current_row - 1]
+            north_cell: Cell = self._cells[current_col][current_row - 1]
             if not north_cell.visited and not north_cell.has_bottom_wall and not self._cells[current_col][current_row].has_top_wall:
                 self._cells[current_col][current_row].draw_move(north_cell)
                 is_solved = self._solve_r(current_col, current_row - 1)
@@ -159,7 +161,7 @@ class Maze():
                     self._cells[current_col][current_row].draw_move(north_cell, undo=True)
         # South
         if current_row + 1 < len(self._cells[current_col]):
-            south_cell = self._cells[current_col][current_row + 1]
+            south_cell: Cell = self._cells[current_col][current_row + 1]
             if not south_cell.visited and not south_cell.has_top_wall and not self._cells[current_col][current_row].has_bottom_wall:
                 self._cells[current_col][current_row].draw_move(south_cell)
                 is_solved = self._solve_r(current_col, current_row + 1)
@@ -169,7 +171,7 @@ class Maze():
                     self._cells[current_col][current_row].draw_move(south_cell, undo=True)
         # East
         if current_col + 1 < len(self._cells):
-            east_cell = self._cells[current_col + 1][current_row]
+            east_cell: Cell = self._cells[current_col + 1][current_row]
             if not east_cell.visited and not east_cell.has_left_wall and not self._cells[current_col][current_row].has_right_wall:
                 self._cells[current_col][current_row].draw_move(east_cell)
                 is_solved = self._solve_r(current_col + 1, current_row)
@@ -179,7 +181,7 @@ class Maze():
                     self._cells[current_col][current_row].draw_move(east_cell, undo=True)
         # West
         if current_col - 1 >= 0:
-            west_cell = self._cells[current_col - 1][current_row]
+            west_cell: Cell = self._cells[current_col - 1][current_row]
             if not west_cell.visited and not west_cell.has_right_wall and not self._cells[current_col][current_row].has_left_wall:
                 self._cells[current_col][current_row].draw_move(west_cell)
                 is_solved = self._solve_r(current_col - 1, current_row)
