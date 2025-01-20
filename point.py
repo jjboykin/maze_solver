@@ -1,4 +1,3 @@
-from tkinter import Tk, BOTH, Canvas
 from dataclasses import dataclass
 
 @dataclass

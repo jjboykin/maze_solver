@@ -16,3 +16,9 @@
 10. ~~Implement type annotations~~
 11. Implement docstrings
 12. ~~Implement dataclasses~~
+13. Break components of solve_r into methods to enable reuse in multiple different algorithms
+14. Make directional prioirty a keyword argument with a default
+    - Pass an explicit list
+    - Pass a function that returns a list
+        1. Always follow the left wall
+        2. Pass a start direction and try each direction clockwise next
